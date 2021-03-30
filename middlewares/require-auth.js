@@ -32,7 +32,7 @@ let requireAuth = (req, res, next) => {
                     //Todo: .json(errorRes(responseMessage.notAuthenticated, res.statusCode, { error: errorDescription.notAuthenticated } ));
         
         //Get data by decryped token
-        const { id, phoneNum } = payload;
+        const { id } = payload;
 
         //Find user
         const validUser = await findUserByPhoneNum(phoneNum);

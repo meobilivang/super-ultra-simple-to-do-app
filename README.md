@@ -3,7 +3,7 @@ Server Side implementation for Simple to-do app
 ## INSTALLATION:
 - Clone this repository:
  ```
-$ git clone https://github.com/meobilivang/demo-camera-app-BE.git
+$ git clone https://github.com/meobilivang/super-ultra-simple-to-do-app.git
  ```
 ## SET UP DEVELOPEMENT ENVIRONMENT:
 Please ensure that you have the below items to start the application:
@@ -11,11 +11,17 @@ Please ensure that you have the below items to start the application:
 - MongoDB
 
 ## BUILD AND RUN:
+- Navigate to Project's directory:
+```
+$ cd <Path to dir>/super-ultra-simple-to-do-app
+```
+
 - Install all dependencies: 
 ```
 $ npm install 
 ```
-- Run Express Server:
+
+b- Run Express Server:
 ```
 $ node server.js
 ```
