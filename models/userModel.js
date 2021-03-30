@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    default: "",
     trim: true
   },
   gender: {
@@ -39,7 +40,6 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please fill your password confirm"],
     validate: {
       validator: function(retypePassword) {
-        // "this" works only on create and save
         return retypePassword === this.password;
       },
       message: "You passwords don't match!",
@@ -56,35 +56,44 @@ const userSchema = new mongoose.Schema({
     select: false, 
   },
 },
+  //Collect created_at & updated_at 
+  { timestamps: true }
+);
 
-//   //Collect created_at & updated_at 
-//   { timestamps: true }
-// );
 
-// // encrypt the password using 'bcryptjs'
-// // Mongoose -> Document Middleware
-// userSchema.pre("save", async function(next) {
-//   // check the password if it is modified
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
+/**
+ * Encrypt password before saving to Database
+ */
+userSchema.pre("save", async function(next) {
+  // check the password if it is modified
+  if (!this.isModified("password")) {
+    return next();
+  }
 
-//   // Hashing the password
-//   this.password = await bcrypt.hash(this.password, 12);
+  // Hashing the password
+  this.password = await bcrypt.hash(this.password, 12);
 
-//   // Delete passwordConfirm field
-//   this.passwordConfirm = undefined;
-//   next();
+  //Remove field
+  this.passwordConfirm = undefined;
+  next();
 
-// });
+});
 
-// // This is Instance Method that is gonna be available on all documents in a certain collection
-// userSchema.methods.correctPassword = async function(
-//   typedPassword,
-//   originalPassword,
-// ) {
-//   return await bcrypt.compare(typedPassword, originalPassword);
-// };
+/**
+ * Method for Validating Password on User Schema. Password is hashed w/ Bcrypt algo 
+ * before comapring with existing one in Database 
+ * 
+ * @param {*} typedPassword 
+ * @param {*} originalPassword 
+ * @returns 
+ */
+userSchema.methods.validatePassword = async function(
+  typedPassword,
+  originalPassword,
+) {
+  return await bcrypt.compare(typedPassword, originalPassword);
+};
+
 
 const User = mongoose.model("User", userSchema);
 

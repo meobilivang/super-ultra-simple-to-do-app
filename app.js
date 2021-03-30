@@ -7,7 +7,7 @@ const hpp = require('hpp');
 const cors = require('cors');
 
 const appRoutes = require('./routes/index');
-const globalErrHandler = require('./controllers/errorResponse');
+const globalErrHandler = require('./controllers/response-models/errorResponse');
 const AppError = require('./utils/appError');
 const app = express();
 const requireAuth = require('./middlewares/require-auth');
