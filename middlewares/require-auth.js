@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
-// const { errorDescription, responseMessage, tokenSigning } = require("../config/const");
-// const { errorRes } = require("../routes/controllers/responseObject");
-//Todo: search for User
+const User = require('../models/userModel');
+const { successRes } = require('./response-models/successResponse');
+const AppError = require("../utils/appError");
+const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
 
 /**
  *  Middleware Checking for Authentication Status
@@ -12,6 +13,7 @@ const jwt = require("jsonwebtoken");
  * @returns 
  */
 let requireAuth = (req, res, next) => {
+    
     //Retrieve the Authorization from header
     const { authorization } = req.headers;
 
@@ -27,20 +29,18 @@ let requireAuth = (req, res, next) => {
     jwt.verify(retrievedToken, tokenSigning.signingString , async(error, payload) => {
         //Invalid token
         if (error)
-            return res
-                    .status(401)
-                    //Todo: .json(errorRes(responseMessage.notAuthenticated, res.statusCode, { error: errorDescription.notAuthenticated } ));
+            return next(new AppError(404, errorDescription.notAuthenticated, errorMessage.notAuthenticated), req, res, next);
         
         //Get data by decryped token
         const { id } = payload;
 
         //Find user
-        const validUser = await findUserByPhoneNum(phoneNum);
+        const validUser = await User.findById(id);
 
         //Attach user Object to request
         req.user = {
             id: validUser.id,
-            phoneNum: validUser.user_name,
+            userName: validUser.userName,
         };
         
         next();

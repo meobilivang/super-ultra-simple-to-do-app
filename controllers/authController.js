@@ -99,6 +99,10 @@ exports.signup = async (req, res, next) => {
         passwordConfirm: passwordConfirm,
     });
 
+    if (!user) {
+      return next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);      
+    }
+
     //Generate token
     const token = createToken(user.id, user.full_name);
 
