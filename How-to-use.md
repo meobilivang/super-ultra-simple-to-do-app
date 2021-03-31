@@ -20,7 +20,14 @@ Smallest unit. User can track performance/work flow by tracking `Tasks`
 ## API Usage:
 By default, server runs on port `3000`
 
+For security resons, `token` must be added to `Headers` under `Authorization` field
+
 - URL would have the following structure:
+```
+http://localhost:3000/api/<Object>/<CRUD-operation>/<id of Object>
+```
+
+- Example: Creating new Task
 ```
 http://localhost:3000/api/<Object>/<CRUD-operation>/<id of Object>
 ```
@@ -39,3 +46,5 @@ https://documenter.getpostman.com/view/11913865/TzCMdnyq
 2. Enhance complexity & re-design Schema 
 
 3. Write Unit Tests
+
+#### If you encounter any issues, feel free to contact me for support :D
