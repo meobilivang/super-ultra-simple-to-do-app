@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   userName: {
@@ -10,8 +11,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please fill your full name"],
     trim: true,
-    maxLength: 35,
-    validate: [validator.isAlpha, "Please provide a valid Name"]
+    validate: {
+      validator: function(inputName) {
+        return /[^a-zA-Z]/.test(inputName);
+      }
+    }
   },
   email: {
     type: String,

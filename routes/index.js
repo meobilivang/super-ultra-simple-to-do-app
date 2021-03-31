@@ -4,13 +4,15 @@ const router = express.Router();
 const boardRouter = require('./boardRoutes');
 const userRouter = require('./userRoutes');
 const taskRouter = require('./taskRoutes');
+const authRouter = require('./authRoutes');
 const requireAuth = require('../middlewares/require-auth');
 
 //Requires JWT to access these APIs
-router.use(['/board', '/task', '/user'], requireAuth);
+router.use(['/boards', '/tasks', '/users'], requireAuth);
 
-router.use('/user', userRouter);
-router.use('/board', boardRouter);
-router.use('/task', taskRouter);
+router.use('/auth', authRouter);
+router.use('/users', userRouter);
+router.use('/boards', boardRouter);
+router.use('/tasks', taskRouter);
 
 module.exports = router;

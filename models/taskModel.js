@@ -6,9 +6,13 @@ const taskSchema = new mongoose.Schema(
             type: String,
             trim: true,            
         },
-        board_id: {
+        boardId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Board' 
+        },
+        ownerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User' 
         },
     },
     //Collect created_at & updated_at timestamp 

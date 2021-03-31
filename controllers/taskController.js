@@ -12,8 +12,8 @@ exports.deleteTask = async (req, res, next) => {
         }
 
         return res
-                .status(204)
-                .json(successRes(successMessage.taskDeleted, 204, { id: deleteTask.id }));
+                .status(200)
+                .json(successRes(successMessage.taskDeleted, 200, { id: deleteTask.id }));
     
             } catch (error) {
         next(error);
@@ -33,8 +33,8 @@ exports.updateTask = async (req, res, next) => {
         }
 
         return res
-                .status(204)
-                .json(successRes(successMessage.taskUpdated, 204, { id: updateTask.id }));
+                .status(200)
+                .json(successRes(successMessage.taskUpdated, 200, { id: updateTask.id }));
 
     } catch (error) {
         next(error);
@@ -51,7 +51,7 @@ exports.createTask = async (req, res, next) => {
 
         return res
                 .status(200)
-                .json(successRes(successMessage.taskCreated, 204, { id: createTask.id }));
+                .json(successRes(successMessage.taskCreated, 200, { id: createTask.id }));
 
     } catch (error) {
         next(error);
@@ -68,7 +68,7 @@ exports.getSingleTask = async (req, res, next) => {
         }
 
         return res
-                .status(204)
+                .status(200)
                 .json(successRes(successMessage.taskListFound, 200, { id: searchTask.id }));
 
     } catch (error) {
@@ -86,7 +86,7 @@ exports.getTaskList = async (req, res, next) => {
 
 
         return res
-                .status(204)
+                .status(200)
                 .json(successRes(successMessage.taskListFound, 200, taskList));
 
     } catch (error) {

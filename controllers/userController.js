@@ -3,16 +3,25 @@ const { successRes } = require('./response-models/successResponse');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
 
+/**
+ *  Get A single User base on Id
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.getUser = async (req, res, next) => {
     try {
-
-        const searchUser = await User.findById(req.params.id);
-
+        
+        //Retrieve user from db
+        const searchUser = await User.findById(req.params.id);      
+      
+        //User not Found
         if (!searchUser) {
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
         }
 
-        return res
+        res
             .status(200)
             .json(successRes(successMessage.userFound, 200, 
             {
@@ -28,10 +37,18 @@ exports.getUser = async (req, res, next) => {
         );
 
     } catch(err) {
-        next(err);
+        //next(err);              //Debugging
+        next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
     }
 };
 
+/**
+ *  Delete User
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.deleteUser = async (req, res, next) => {
     try {
 
@@ -41,34 +58,37 @@ exports.deleteUser = async (req, res, next) => {
             return next(new AppError(404, errorDescription.unableDelete, errorMessage.unableDelete), req, res, next);
         }
 
-        return res
-                .status(204)
-                .json(successRes(successMessage.userDeleted, 204, 
-                {
-                    id: deleteUser.id
-                })
-        );
+        res
+            .status(200)
+            .json(successRes(successMessage.userDeleted, 200, { id: deleteUser.id }));
 
     } catch (error) {
         next(error);
     }
 };
 
+/**
+ *  Update User Info
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.updateUser = async (req, res, next) => {
     try {
-
+        
         const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });
-
+        
         if (!updateUser) {
             return next(new AppError(404, errorDescription.unableUpdate, errorMessage.unableUpdate), req, res, next);
         }
 
-        return res
-                .status(204)
-                .json(successRes(successMessage.userUpdated, 204, { id: updateUser.id}));
+        res
+            .status(200)
+            .json(successRes(successMessage.userUpdated, 200, { id: updateUser.id }));
 
     } catch (error) {
         next(error);

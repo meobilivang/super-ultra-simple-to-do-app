@@ -10,7 +10,7 @@ const appRoutes = require('./routes/index');
 const globalErrHandler = require('./controllers/response-models/errorResponse');
 const AppError = require('./utils/appError');
 const app = express();
-const requireAuth = require('./middlewares/require-auth');
+const { errorDescription, errorMessage } = require('./utils/const');
 
 app.use(cors());        //Allow cross-origin reqs
 
@@ -24,8 +24,6 @@ const limiter = rateLimit({
 });
 
 app.use('*', limiter);           //Apply traffic-limiter Middleware
-
-app.use('*', requireAuth);       //User must authenticated to continue
 
 /* Parse Body of Requests to JSON format */
 app.use(express.json({
@@ -41,7 +39,7 @@ app.use('/api', appRoutes);
 
 /* Handle Undefined Routes */
 app.use('*', (req, res, next) => {
-    const err = new AppError(404, 'fail', 'Undefined Route');
+    const err = new AppError(404, errorDescription.undefinedRoute, errorMessage.undefinedRoute);
     next(err, req, res, next);
 });
 

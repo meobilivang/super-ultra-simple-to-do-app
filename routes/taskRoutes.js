@@ -7,7 +7,7 @@ const { getTaskList, getSingleTask, createTask, updateTask, deleteTask }  = requ
 taskRouter.get('/list', getTaskList);
 taskRouter.get('/:id', getSingleTask);
 taskRouter.post('/create', createTask);
-taskRouter.patch('/update', updateTask);
-taskRouter.delete('/delete', deleteTask);
+taskRouter.patch('/update/:id', updateTask);
+taskRouter.delete('/delete/:id', deleteTask);
 
 module.exports = taskRouter;

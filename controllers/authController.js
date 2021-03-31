@@ -16,8 +16,8 @@ const { successAuthRes } = require('./response-models/successResponse');
  */
 const createToken = (userId, userName) => {
   return jwt.sign(
-    { userId, userName },
-    process.env.JWT_SECRET,
+    { id: userId, userName },
+    process.env.JWT_STRING,
     { expiresIn: process.env.JWT_EXPIRES_IN },
   );
 };
@@ -62,7 +62,8 @@ exports.login = async (req, res, next) => {
             .json(successAuthRes(successMessage.completeAuthentication, 200, token));
 
   } catch (err) {
-    next(err);
+    //next(err);    //Debugging
+    next(new AppError(401, errorDescription.wrongCredentials, errorMessage.wrongCredentials), req, res, next);
   }
 };
 
@@ -90,15 +91,15 @@ exports.signup = async (req, res, next) => {
     
     //Create new User
     const user = await User.create({
-        user_name: userName,
-        full_name: fullName,
+        userName: userName,
+        fullName: fullName,
         email: email,
         description: description, 
         gender: gender,
         password: password,
         passwordConfirm: passwordConfirm,
     });
-
+    
     if (!user) {
       return next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);      
     }
@@ -112,6 +113,7 @@ exports.signup = async (req, res, next) => {
             .json(successAuthRes(successMessage.userSignedUpSuccess, 200, token));
 
   } catch (err) {
-    next(err);
+    //next(err);  //Debugging
+    next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);
   }
 };

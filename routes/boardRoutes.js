@@ -6,7 +6,7 @@ const { getBoardList, getSingleBoard, createBoard, updateBoard, deleteBoard }  =
 boardRouter.get('/list', getBoardList);
 boardRouter.get('/:id', getSingleBoard);
 boardRouter.post('/create', createBoard);
-boardRouter.patch('/update', updateBoard);
-boardRouter.delete('/delete', deleteBoard);
+boardRouter.patch('/update/:id', updateBoard);
+boardRouter.delete('/delete/:id', deleteBoard);
 
 module.exports = boardRouter;

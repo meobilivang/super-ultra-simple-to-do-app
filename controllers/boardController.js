@@ -3,6 +3,13 @@ const { successRes } = require('./response-models/successResponse');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
 
+/**
+ *  Delete A Board
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.deleteBoard = async (req, res, next) => {
     try {
         const deleteBoard = await Board.findByIdAndDelete(req.params.id);
@@ -12,14 +19,21 @@ exports.deleteBoard = async (req, res, next) => {
         }
 
         return res
-                .status(204)
-                .json(successRes(successMessage.boardDeleted, 204, { id: deleteBoard.id }));
+                .status(200)
+                .json(successRes(successMessage.boardDeleted, 200, { id: deleteBoard.id }));
     
             } catch (error) {
         next(error);
     }
 };
 
+/**
+ *  Update Board info
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.updateBoard = async (req, res, next) => {
     try {
 
@@ -33,8 +47,8 @@ exports.updateBoard = async (req, res, next) => {
         }
 
         return res
-                .status(204)
-                .json(successRes(successMessage.boardUpdated, 204, { id: updateBoard.id }));
+                .status(200)
+                .json(successRes(successMessage.boardUpdated, 200, { id: updateBoard.id }));
 
     } catch (error) {
         next(error);
@@ -43,6 +57,11 @@ exports.updateBoard = async (req, res, next) => {
 
 exports.createBoard = async (req, res, next) => {
     try {
+        
+        //Attaching ownerId to request body
+        req.body.ownerId = req.user.id;
+
+        //Creating board
         const createBoard = await Board.create(req.body);
 
         if (!createBoard) {
@@ -51,13 +70,20 @@ exports.createBoard = async (req, res, next) => {
 
         return res
                 .status(200)
-                .json(successRes(successMessage.boardCreated, 204, { id: createBoard.id }));
+                .json(successRes(successMessage.boardCreated, 200, { id: createBoard.id }));
 
     } catch (error) {
         next(error);
     }
 };
 
+/**
+ *  Get a Board specified by Id
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.getSingleBoard = async (req, res, next) => {
     try {
 
@@ -68,7 +94,7 @@ exports.getSingleBoard = async (req, res, next) => {
         }
 
         return res
-                .status(204)
+                .status(200)
                 .json(successRes(successMessage.boardListFound, 200, { id: searchBoard.id }));
 
     } catch (error) {
@@ -76,6 +102,13 @@ exports.getSingleBoard = async (req, res, next) => {
     }
 };
 
+/**
+ *  Get List of Boards
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.getBoardList = async (req, res, next) => {
     try {
         
@@ -86,7 +119,7 @@ exports.getBoardList = async (req, res, next) => {
 
 
         return res
-                .status(204)
+                .status(200)
                 .json(successRes(successMessage.boardListFound, 200, boardList));
 
     } catch (error) {

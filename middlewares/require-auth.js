@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/userModel');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
+const dotenv = require('dotenv');
+
+dotenv.config({
+    path: './config.env'
+});
+
+const signingString = process.env.JWT_STRING
 
 /**
  *  Middleware Checking for Authentication Status
@@ -24,7 +31,7 @@ let requireAuth = (req, res, next) => {
     const retrievedToken = authorization.replace('Bearer', '');
 
     //Validate token
-    jwt.verify(retrievedToken, tokenSigning.signingString , async(error, payload) => {
+    jwt.verify(retrievedToken, signingString , async(error, payload) => {
         //Invalid token
         if (error)
             return next(new AppError(404, errorDescription.notAuthenticated, errorMessage.notAuthenticated), req, res, next);

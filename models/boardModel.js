@@ -12,11 +12,11 @@ const boardSchema = new mongoose.Schema({
         trim: true,
     },
     //Referencing to an array of Tasks
-    task_collection: [{
+    taskCollection: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task' 
     }], 
-    owner_id: {
+    ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
