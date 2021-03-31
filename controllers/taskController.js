@@ -2,7 +2,6 @@ const Task = require('../models/taskModel');
 const { successRes } = require('./response-models/successResponse');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
-const APIFeatures = require('../utils/apiFeatures');
 
 exports.deleteTask = async (req, res, next) => {
     try {
@@ -59,7 +58,7 @@ exports.createTask = async (req, res, next) => {
     }
 };
 
-exports.getTask = async (req, res, next) => {
+exports.getSingleTask = async (req, res, next) => {
     try {
 
         const searchTask = await task.findById(req.params.id);
@@ -77,7 +76,7 @@ exports.getTask = async (req, res, next) => {
     }
 };
 
-exports.getList = async (req, res, next) => {
+exports.getTaskList = async (req, res, next) => {
     try {
         
         const taskList = await task.find({ owner_id: req.user.id }).exec();

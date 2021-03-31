@@ -54,7 +54,7 @@ exports.deleteUser = async (req, res, next) => {
     }
 };
 
-exports.updateOne = async (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
     try {
 
         const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, {

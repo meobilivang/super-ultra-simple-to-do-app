@@ -7,10 +7,10 @@ const taskRouter = require('./taskRoutes');
 const requireAuth = require('../middlewares/require-auth');
 
 //Requires JWT to access these APIs
-router.use(['/board', '/task'], requireAuth);
+router.use(['/board', '/task', '/user'], requireAuth);
 
-router.user('/user', userRouter);
+router.use('/user', userRouter);
 router.use('/board', boardRouter);
-router.user('/task', taskRouter);
+router.use('/task', taskRouter);
 
 module.exports = router;

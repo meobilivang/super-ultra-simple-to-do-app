@@ -1,12 +1,12 @@
 const express = require('express');
 const boardRouter = express.Router();
 
-//const boardController = require('../controllers/boardController');
+const { getBoardList, getSingleBoard, createBoard, updateBoard, deleteBoard }  = require('../controllers/boardController');
 
-boardController.get('/list', boardController.getListBoard);
-boardController.get('/:id', boardController.getSingleBoard);
-boardController.post('/create', boardController.createBoard);
-boardController.patch('/update', boardController.updateBoard);
-boardController.delete('/delete', boardController.deleteBoard);
+boardRouter.get('/list', getBoardList);
+boardRouter.get('/:id', getSingleBoard);
+boardRouter.post('/create', createBoard);
+boardRouter.patch('/update', updateBoard);
+boardRouter.delete('/delete', deleteBoard);
 
 module.exports = boardRouter;

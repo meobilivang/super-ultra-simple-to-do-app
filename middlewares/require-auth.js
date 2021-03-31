@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/userModel');
-const { successRes } = require('./response-models/successResponse');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
 
@@ -17,11 +16,10 @@ let requireAuth = (req, res, next) => {
     //Retrieve the Authorization from header
     const { authorization } = req.headers;
 
-    if (!authorization)
-        return res
-                .status(401)
-                //Todo: .json(errorRes(responseMessage.notAuthenticated, res.statusCode, errorDescription.notAuthenticated));
-    
+    if (!authorization) {
+        return next(new AppError(401, errorDescription.notAuthenticated, errorMessage.notAuthenticated), req, res, next);
+    }
+
     //Retrieve token
     const retrievedToken = authorization.replace('Bearer', '');
 

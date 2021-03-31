@@ -2,7 +2,6 @@ const Board = require('../models/boardModel');
 const { successRes } = require('./response-models/successResponse');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
-const APIFeatures = require('../utils/apiFeatures');
 
 exports.deleteBoard = async (req, res, next) => {
     try {
@@ -59,7 +58,7 @@ exports.createBoard = async (req, res, next) => {
     }
 };
 
-exports.getBoard = async (req, res, next) => {
+exports.getSingleBoard = async (req, res, next) => {
     try {
 
         const searchBoard = await Board.findById(req.params.id);
@@ -77,7 +76,7 @@ exports.getBoard = async (req, res, next) => {
     }
 };
 
-exports.getList = async (req, res, next) => {
+exports.getBoardList = async (req, res, next) => {
     try {
         
         const boardList = await Board.find({ owner_id: req.user.id }).exec();
@@ -94,8 +93,4 @@ exports.getList = async (req, res, next) => {
         next(error);
     }
 
-};
-
-exports.modules = {
-      
 };
