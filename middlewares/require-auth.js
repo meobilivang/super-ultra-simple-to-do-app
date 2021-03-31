@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const AppError = require("../utils/appError");
 const { errorDescription, errorMessage, successMessage } =  require('../utils/const');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config({
     path: './config.env'
@@ -38,6 +39,10 @@ let requireAuth = (req, res, next) => {
         
         //Get data by decryped token
         const { id } = payload;
+
+        //Invalid Object Id
+        if (!mongoose.Types.ObjectId.isValid(id))
+            return next(new AppError(404, errorDescription.notAuthenticated, errorMessage.notAuthenticated), req, res, next);
 
         //Find user
         const validUser = await User.findById(id);

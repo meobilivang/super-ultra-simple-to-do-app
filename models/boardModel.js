@@ -4,21 +4,25 @@ const boardSchema = new mongoose.Schema({
     title: {
         type: String,
         trim: true,
-        minLength: 5,
-        maxLength: 50,
+        required: [true, "Please provide a title for your Board"]
     },
     description: {
         type: String,
         trim: true,
     },
     //Referencing to an array of Tasks
-    taskCollection: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task' 
-    }], 
+    taskCollection: {
+        type: [{ 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task',
+            index: true
+        }],
+    }, 
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true, 
+        index: true
     },
 }, 
     //Collect created_at & updated_at timestamp 
