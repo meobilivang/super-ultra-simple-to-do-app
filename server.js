@@ -5,6 +5,7 @@ dotenv.config({
     path: './config.env'
 });
 
+//Handling exceptions
 process.on('uncaughtException', err => {
     console.log('Uncaught Exception!');
     console.log(err);
@@ -14,6 +15,7 @@ process.on('uncaughtException', err => {
 
 const app = require('./app');
 
+//Retrieving database Connection URL from .env
 const database = process.env.DATABASE.replace('<db_password>', process.env.DATABASE_PASSWORD);
 
 /* Database Connection */
@@ -31,6 +33,7 @@ app.listen(port, () => {
     console.log(`Application is running on port ${port}`);
 });
 
+//Handling exceptions
 process.on('unhandledRejection', err => {
     console.log('Uncaught Exception!');
     console.log(err);

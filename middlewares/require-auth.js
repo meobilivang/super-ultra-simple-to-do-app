@@ -9,6 +9,7 @@ dotenv.config({
     path: './config.env'
 });
 
+//Signing str from .env file
 const signingString = process.env.JWT_STRING
 
 /**

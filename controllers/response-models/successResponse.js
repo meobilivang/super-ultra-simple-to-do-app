@@ -1,3 +1,10 @@
+/**
+ * Model for Success Message
+ * @param {*} message 
+ * @param {*} statusCode 
+ * @param {*} data 
+ * @returns 
+ */
 exports.successRes = (message, statusCode, data) => {
     return {
         message,
@@ -7,6 +14,15 @@ exports.successRes = (message, statusCode, data) => {
     };
 }
 
+
+/**
+ *  Model for Successful Auth Response
+ * 
+ * @param {*} message 
+ * @param {*} statusCode 
+ * @param {*} token 
+ * @returns 
+ */
 exports.successAuthRes = (message, statusCode, token) => {
     return {
         message,

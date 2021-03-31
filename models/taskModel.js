@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+/**
+ * Schema for Task
+ */
 const taskSchema = new mongoose.Schema(
     {
         description: {

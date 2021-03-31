@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+/**
+ * Schema for Board Object
+ */
 const boardSchema = new mongoose.Schema({
     title: {
         type: String,

@@ -15,7 +15,7 @@ const { search } = require('../app');
  * @param {*} boardId 
  * @returns 
  */
-const isValidBoardId =  async (userId, boardId) => {
+const isValidIds =  async (userId, boardId) => {
     return Promise.all([User.findById(userId), Board.findById(boardId)]).then(values => {
         
         //Check existence of User, Board from Ids
@@ -40,6 +40,7 @@ const isValidBoardId =  async (userId, boardId) => {
  */
 exports.deleteTask = async (req, res, next) => {
     try {
+
         const deleteTask = await Task.findByIdAndDelete(req.params.id);
 
         if (!deleteTask) {
@@ -96,7 +97,7 @@ exports.createTask = async (req, res, next) => {
     try {
 
         //Check whether Ids are valid
-        if (!await isValidBoardId(req.user.id, req.body.boardId)) {
+        if (!await isValidIds(req.user.id, req.body.boardId)) {
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
         }
 
