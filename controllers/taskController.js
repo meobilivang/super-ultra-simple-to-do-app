@@ -100,7 +100,11 @@ exports.createTask = async (req, res, next) => {
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
         }
 
-        const createTask = await Task.create(req.body);
+        const createTask = await Task.create({
+            title: req.body.title,
+            description: req.body.description,
+            ownerId: req.user.id,
+        });
 
         if (!createTask) {
             return next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);
@@ -151,6 +155,12 @@ exports.getSingleTask = async (req, res, next) => {
 
 /**
  *  Get full List of Task from an User
+ * 
+ *  Search options:
+ *  - Default: all Tasks belong to that user 
+ *    
+ *  - searchByBoardId
+ * 
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
@@ -158,20 +168,26 @@ exports.getSingleTask = async (req, res, next) => {
  */
 exports.getTaskList = async (req, res, next) => {
     try {
+        //Check Search Option in Query Params
+        let requestedBoardId = req.query.searchByBoard == 'true' ? req.body.boardId : null;
+        let taskList = Task
+                                .find({ 
+                                    ownerId: req.user.id,
+                                })
+                                .select('description')
+                                .select('boardId')
+                                .select('ownerId')
+                                .select('createdAt')
+                                .select('updatedAt');
         
-        //Check whether Ids are valid
-        if (!await isValidBoardId(req.user.id, req.body.boardId)) {
-            return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
+        //Filter by Board Id
+        if (requestedBoardId) {
+            taskList = taskList.where('boardId').equals(requestedBoardId);
         }
 
-        const taskList = await Task
-                                    .find({ ownerId: req.user.id })
-                                    .select('description')
-                                    .select('boardId')
-                                    .select('ownerId')
-                                    .select('createdAt')
-                                    .select('updatedAt');
-
+        //Execute Query
+        taskList =  await taskList.exec();
+            
         if (!taskList)
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
 

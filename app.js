@@ -43,6 +43,7 @@ app.use('*', (req, res, next) => {
     next(err, req, res, next);
 });
 
+/* Error Handler */
 app.use(globalErrHandler);
 
 module.exports = app;
