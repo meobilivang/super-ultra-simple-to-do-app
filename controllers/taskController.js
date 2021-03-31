@@ -17,7 +17,16 @@ const { search } = require('../app');
  */
 const isValidBoardId =  async (userId, boardId) => {
     return Promise.all([User.findById(userId), Board.findById(boardId)]).then(values => {
-        return values.every(elem => elem === true);
+        
+        //Check existence of User, Board from Ids
+        let isIdsExist = values.every(elem => elem != null); 
+        
+        //Check whether Board belongs to this User
+        if (isIdsExist & typeof values == "object") {
+            return String(values[1].ownerId).localeCompare(String(values[0].id)) == 0;
+        }
+        
+        return false;
     });
 };
 
@@ -57,7 +66,7 @@ exports.deleteTask = async (req, res, next) => {
 exports.updateTask = async (req, res, next) => {
     try {
 
-        const updateTask = await task.findByIdAndUpdate(req.params.id, req.body, {
+        const updateTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });
@@ -85,9 +94,13 @@ exports.updateTask = async (req, res, next) => {
  */
 exports.createTask = async (req, res, next) => {
     try {
-         
 
-        const createTask = await task.create(req.body);
+        //Check whether Ids are valid
+        if (!await isValidBoardId(req.user.id, req.body.boardId)) {
+            return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
+        }
+
+        const createTask = await Task.create(req.body);
 
         if (!createTask) {
             return next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);
@@ -113,9 +126,9 @@ exports.createTask = async (req, res, next) => {
 exports.getSingleTask = async (req, res, next) => {
     try {
 
-        const searchTask = await task.findById(req.params.id);
+        const searchTask = await Task.findById(req.params.id);
 
-        if (!updateTask) {
+        if (!searchTask) {
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
         }
 
@@ -131,7 +144,8 @@ exports.getSingleTask = async (req, res, next) => {
             }));
 
     } catch (error) {
-        next(error);
+        //next(error);
+        next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
     }
 };
 
@@ -146,11 +160,11 @@ exports.getTaskList = async (req, res, next) => {
     try {
         
         //Check whether Ids are valid
-        if (!isValidBoardId(req.user.userId, req.boardId)) {
-
+        if (!await isValidBoardId(req.user.id, req.body.boardId)) {
+            return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
         }
 
-        const taskList = await task
+        const taskList = await Task
                                     .find({ ownerId: req.user.id })
                                     .select('description')
                                     .select('boardId')
@@ -161,13 +175,13 @@ exports.getTaskList = async (req, res, next) => {
         if (!taskList)
             return next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
 
-
         res
             .status(200)
             .json(successRes(successMessage.taskListFound, 200, taskList));
 
     } catch (error) {
-        next(error);
+        //next(error);
+        next(new AppError(404, errorDescription.notFound, errorMessage.notFound), req, res, next);
     }
 
 };

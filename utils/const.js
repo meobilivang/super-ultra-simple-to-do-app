@@ -6,6 +6,7 @@ const errorDescription = {};
 errorDescription.notAuthenticated = "Not Authenticated!"
 errorDescription.undefinedRoute = "This route is not valid! Please return to valid routes"
 
+errorDescription.permissionDenied = "Permission Denied!"
 errorDescription.missingCredentials = "Missing credentials !";
 errorDescription.wrongCredentials = "Wrong Credentials";
 
@@ -23,6 +24,7 @@ const errorMessage = {};
 errorMessage.notAuthenticated = "Please authenticate yourself to continue!";
 errorMessage.undefinedRoute = "Undefined Route!";
 
+errorMessage.permissionDenied = "You don't have Permission to access! Please stay back!";
 errorMessage.missingCredentials = "Please provide your username/password";
 errorMessage.wrongCredentials = "Please re-enter your credentials";
 

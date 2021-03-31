@@ -10,14 +10,6 @@ const boardSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    //Referencing to an array of Tasks
-    taskCollection: {
-        type: [{ 
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Task',
-            index: true
-        }],
-    }, 
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
