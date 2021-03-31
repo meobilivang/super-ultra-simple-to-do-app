@@ -29,3 +29,6 @@ $ npm install
 ```
 $ node server.js
 ```
+
+## How-to-use
+Please take a look at `How-to-use.md` for usage guidances.
