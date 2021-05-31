@@ -1,9 +1,8 @@
 const { chai, app, should } = require('./testConfig');
-const BoardModel = require("../models/boardModel");
 
 const testUser = {
     userName: "pnguyen5",
-    fullName: "Nguyen Duc Phong",
+    fullName: "Nguyen D. Phong",
     email: "pnguyen5@conncoll.edu",
     description: "Phong Nguyen the Tester", 
     gender: "M",
@@ -11,36 +10,56 @@ const testUser = {
     passwordConfirm: "12345678",
 }
 
-describe("User CRUD tests", () => {
+describe("User Authentication", () => {
 
-	describe("Failed Login", () => {
+	describe("/api/auth/login - Failed Login", () => {
+		it("Log in shoud fail with unregistered user", (done) => {
+		chai.request(app)
+			.post("/api/auth/login")
+			.send({ "email": testUser.email, "password": testUser.password })
+			.end((err, res) => {
+
+				res.should.have.status(404);
+				res.body.should.have.property("error").eql("Missing credentials !");
+
+				done();
+			});
+		});
+	});
+
+
+	describe("/api/auth/login - Sign up User", () => {
+		it("it shoud add a new user", (done) => {
+		chai.request(app)
+			.post("/api/auth/signup")
+			.send(testUSer)
+			.end((err, res) => {
+				
+				res.should.have.status(200);
+				res.body.should.have.property("message").eql("Successfully Signed Up!");
+				testUser.token = res.body.token;
+
+				done();
+			});
+		});
+	});
+
+	describe("/api/auth/login - log in User", () => {
+		it("it shoud authenticate an exisiting user", (done) => {
 		chai.request(app)
 			.post("/api/auth/login")
 			.send({ "email": testUser.email, "password": testUser.password })
 			.end((err, res) => {
 				
-				res.body.should.be.a('object');
-				res.should.have.status(400);
-				res.body.should.have.property("message").eql("Wrong Credentials");
+				res.should.have.status(200);
+				res.body.should.have.property("message").eql("Successfully Authenticated!");
+				testUser.token = res.body.token;
 
 				done();
 			});
-	};
+		});
+	});
 
 
-	//describe("Sign Up new Account", () => {
-		//chai.request(app)
-			//.post("/api/auth/signup")
-			//.end((err, res) => {
-				
-				//res.should.have.status(200);
-				//res.body.should.be.a('object');
-				//res.body.should.have.property("message").eql("Successfully Signed Up!");
-				//testUser.token = res.body.token;
-
-				//done();
-			//});
-	//};
-
-};
+});
 
