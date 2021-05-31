@@ -1,4 +1,4 @@
-#process.env.NODE_ENV = "staging"
+process.env.NODE_ENVIRONMENT = "test"
 
 /**
  * Packages for Unit Tests
