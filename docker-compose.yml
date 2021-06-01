@@ -2,7 +2,7 @@ version: '2'
 services:
   to-do-app:
     build: .
-    image: simple-to-do-nodejs:1.1 
+    image: simple-to-do-nodejs-app:1.1 
     ports:
       - "3400:3400"
     environment:
