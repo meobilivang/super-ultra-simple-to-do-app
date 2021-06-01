@@ -31,7 +31,9 @@ pipeline {
 	stage('Building Image') {
 		steps {
 			script {
-				dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
+				sh 'docker ps'
+				sh 'whoami'
+				//dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
 			}
 		}
 	}
@@ -39,9 +41,9 @@ pipeline {
 	stage('Push Image to DockerHub') {
 		steps {
 			script {
-				docker.withRegistry('', registryCredential) {
-					dockerImage.push()
-				}
+				//docker.withRegistry('', registryCredential) {
+				//	dockerImage.push()
+				//}
 			}
 		}
 	}
