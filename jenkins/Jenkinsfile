@@ -31,7 +31,7 @@ pipeline {
 	stage('Building Image') {
 		steps {
 			//script {
-				sh 'docker ps'
+				//sh 'docker ps'
 				sh 'whoami'
 				//dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
 			//}
