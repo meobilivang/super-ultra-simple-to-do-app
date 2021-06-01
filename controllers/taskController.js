@@ -139,7 +139,7 @@ exports.getSingleTask = async (req, res, next) => {
 
         res
             .status(200)
-            .json(successRes(successMessage.taskListFound, 200, {
+            .json(successRes(successMessage.taskFound, 200, {
                 id: searchTask.id,
                 description: searchTask.description,
                 ownerId: searchTask.ownerId,

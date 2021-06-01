@@ -2,12 +2,19 @@ const { chai, server, should, testUser } = require('./testConfig');
 const { createToken } = require('../controllers/authController')
 
 
-describe("Board CRUD", ()=> {
+describe("Task CRUD", ()=> {
 
     let TOKEN = null;
+    //let boardID = null;
+
     let testTask = {
         title: "Do laundry",
         description: "Dont use washing powder! Use Pods"
+    }
+
+    let testBoard = {
+        title: "Tuesday Morning Routine Work From Home",
+        description: "What i do on Tuesday morning while working from home"
     }
 
     describe("/api/auth/login - Log in User", () => {
@@ -28,10 +35,29 @@ describe("Board CRUD", ()=> {
 		});
 	});
 
+    describe("/api/boards/create - Creating new Board", () => {
+		it("it should create a new board", (done) => {
+            chai.request(server)
+                .post("/api/boards/create")
+                .set({ "Authorization": TOKEN })
+                .send(testBoard)
+                .then((res) => {
+                    
+                    res.should.have.status(200);
+                    testTask.boardId = res.body.data.id;
+                    
+                    done();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            });
+	    });
+
 
     
-    describe("/api/tasks/create - Creating new Board", () => {
-		it("it should create a new board", (done) => {
+    describe("/api/tasks/create - Creating new Task", () => {
+		it("it should create a new task", (done) => {
             chai.request(server)
                 .post("/api/tasks/create")
                 .set({ "Authorization": TOKEN })
@@ -39,7 +65,7 @@ describe("Board CRUD", ()=> {
                 .then((res) => {
                     
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("New Task has been created!");
+                    res.body.should.have.property("message").eql("New task has been created!");
                     testTask.id = res.body.data.id;
                     
                     done();
@@ -78,7 +104,7 @@ describe("Board CRUD", ()=> {
                 .get("/api/tasks/" + testTask.id)
                 .set({ "Authorization": TOKEN })
                 .then((res) => {
-                    
+
                     res.should.have.status(200);
                     res.body.should.have.property("message").eql("Found your Task!");
     
