@@ -1,23 +1,8 @@
 const { chai, server, should, testUser } = require('./testConfig');
 const UserModel = require('../models/userModel');
 
-// const testUser = {
-//     userName: "pnguyen5",
-//     fullName: "Nguyen D. Phong",
-//     email: "pnguyen5@conncoll.edu",
-//     description: "Phong Nguyen the Tester", 
-//     gender: "M",
-//     password: "12345678",
-//     passwordConfirm: "12345678",
-// }
 
 describe("User Authentication", () => {
-	
-	before((done) => {
-		server.on("app-started", function(){
-			done();
-		});
-	});
 
 	describe("/api/auth/signup - Sign up User", () => {
 
@@ -30,7 +15,7 @@ describe("User Authentication", () => {
 			});
 		});
 
-		it("it shoud add a new user", (done) => {
+		it("it should add a new user", (done) => {
 			chai.request(server)
 				.post("/api/auth/signup")
 				.send(testUser)
@@ -43,12 +28,13 @@ describe("User Authentication", () => {
 					done();
                 }).catch(err => {
                     console.log(err);
+					done();
                 });
 		});
 	});
 
-	describe("/api/auth/login - Log in User", () => {ss
-		it("it shoud authenticate an exisiting user", (done) => {
+	describe("/api/auth/login - Log in User", () => {
+		it("it should authenticate an exisiting user", (done) => {
 			chai.request(server)
 				.post("/api/auth/login")
 				.send({ "userName": testUser.userName, "password": testUser.password })
@@ -61,6 +47,7 @@ describe("User Authentication", () => {
 					done();
                 }).catch(err => {
                     console.log(err);
+					done();
                 });
 		});
 	});

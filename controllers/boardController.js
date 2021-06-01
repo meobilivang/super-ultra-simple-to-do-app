@@ -105,7 +105,7 @@ exports.getSingleBoard = async (req, res, next) => {
 
         res
             .status(200)
-            .json(successRes(successMessage.boardListFound, 200, { 
+            .json(successRes(successMessage.boardFound, 200, { 
                 id: searchBoard.id,
                 title: searchBoard.title,
                 description: searchBoard.description,

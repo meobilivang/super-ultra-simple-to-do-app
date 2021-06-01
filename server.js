@@ -27,7 +27,7 @@ mongoose.connect(database, {
 }).then(connection => {
     app.emit("app-started");
 
-    if (process.env.NODE_ENVIROMMENT == "development") {
+    if (process.env.NODE_ENVIROMMENT != "development") {
         console.log('DB connection Successfully!');
     }
     

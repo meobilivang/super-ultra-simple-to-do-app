@@ -1,101 +1,130 @@
 const { chai, server, should, testUser } = require('./testConfig');
-
-const testBoard = {
-    title: "Monday Morning Routine Work From Home",
-    description: "What i do on monday morning while working from home"
-}
+const { createToken } = require('../controllers/authController')
 
 
 describe("Board CRUD", ()=> {
 
-    // describe("/api/auth/login - Login user", () => {
-	// 	it("it shoud login an user & retrieve JWT Token", (done) => {
-    //         chai.request(app)
-    //             .post("/api/auth/login")
-    //             .send({ "email": testUser.email, "password": testUser.password })
-    //             .end((err, res) => {
-                    
-    //                 res.should.have.status(200);
-    //                 res.body.should.have.property("message").eql("Successfully Authenticated!");
-    //                 testUser.token = res.body.token;
-    
-    //                 done();
-    //             }).catch(done);
-    //         });
-	// });
+    let TOKEN = null;
+    let testBoard = {
+        title: "Monday Morning Routine Work From Home",
+        description: "What i do on monday morning while working from home"
+    }
+
+    describe("/api/auth/login - Log in User", () => {
+		it("it should authenticate an exisiting user & retrieve JWT Token", (done) => {
+			chai.request(server)
+				.post("/api/auth/login")
+				.send({ "userName": testUser.userName, "password": testUser.password })
+				.then((res) => {
+
+					res.should.have.status(200);
+					res.body.should.have.property("message").eql("Successfully Authenticated!");
+					TOKEN = res.body.token;
+
+					done();
+                }).catch(err => {
+                    console.log(err);
+                });
+		});
+	});
+
+
     
     describe("/api/boards/create - Creating new Board", () => {
-		it("it shoud create a new board", (done) => {
-            chai.request(app)
+		it("it should create a new board", (done) => {
+            chai.request(server)
                 .post("/api/boards/create")
-                .set({ "Authorization": `${testUser.token}` })
+                .set({ "Authorization": TOKEN })
                 .send(testBoard)
-                .end((err, res) => {
-    
+                .then((res) => {
+                    
                     res.should.have.status(200);
                     res.body.should.have.property("message").eql("New Board has been created!");
-                    testBoard.id = res.body.id;
-
+                    testBoard.id = res.body.data.id;
+                    
                     done();
                 })
-                .catch(done);
+                .catch(err => {
+                    console.log(err);
+                });
             });
 	});
    
     describe("/api/boards/update/:id - Board", () => {
-		it("it shoud ", (done) => {
-            chai.request(app)
-                .update("/api/boards")
-                .set({ "Authorization": `${testUser.token}` })
+		it("it should update 'title' & 'description' of board", (done) => {
+            chai.request(server)
+                .patch("/api/boards/update/" + testBoard.id)
+                .set({ "Authorization": TOKEN })
                 .send({
                     title: "Monday Morning Routine Work From Home Updated",
-                    description: "Updated hat i do on monday morning while working from home"
+                    description: "Updated what i do on monday morning while working from home"
                 })
-                .end((err, res) => {
-    
+                .then((res) => {
+
                     res.should.have.status(200);
                     res.body.should.have.property("message").eql("Existing Board has been updated!");
     
                     done();
                 })
-                .catch(done);
+                .catch(err => {
+                    console.log(err);
+                });
             });
 	});
 
     describe("/api/boards/:id - Board", () => {
-		it("it shoud return the board with defined ID", (done) => {
-            chai.request(app)
-                .get(`/api/boards/${testBoard.id}`)
-                .set({ "Authorization": `${testUser.token}` })
-                .end((err, res) => {
-    
+		it("it should return the board with defined ID", (done) => {
+            chai.request(server)
+                .get("/api/boards/" + testBoard.id)
+                .set({ "Authorization": TOKEN })
+                .then((res) => {
+                    
                     res.should.have.status(200);
-                    res.body.
-                    res.body.should.have.property("message").eql("");
+                    res.body.should.have.property("message").eql("Found your Board!");
     
                     done();
                 })
-                .catch(done);
+                .catch(err => {
+                    console.log(err);
+                });
+            });
+	});
+
+    describe("/api/boards/list - Board", () => {
+		it("it should return board list of an User", (done) => {
+            chai.request(server)
+                .get(`/api/boards/list`)
+                .set({ "Authorization": TOKEN })
+                .then((res) => {
+    
+                    res.should.have.status(200);
+                    res.body.data.should.be.a('array');
+                    res.body.should.have.property("message").eql("Successfully found your Board list");
+    
+                    done();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
             });
 	});
 
 
     describe("/api/boards/delete - Delete Board", () => {
-		it("it shoud delete an existing board", (done) => {
-            chai.request(app)
-                .delete("/api/boards")
-                .set({ "Authorization": `${testUser.token}` })
-                .send({
-                    
-                })
-                .end((err, res) => {
+		it("it should delete an existing board", (done) => {
+            chai.request(server)
+                .delete("/api/boards/delete/" + testBoard.id)
+                .set({ "Authorization": TOKEN })
+                .then((res) => {
     
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("");
+                    res.body.should.have.property("message").eql("Your Board has been deleted!");
     
                     done();
                 })
-                .catch(done);
+                .catch(err => {
+                    console.log(err);
+                });
             });
 	});
 

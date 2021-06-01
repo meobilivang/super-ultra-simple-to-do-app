@@ -22,6 +22,7 @@ const createToken = (userId, userName) => {
   );
 };
 
+
 /**
  *  Authenticate & Login to an account
  *  
