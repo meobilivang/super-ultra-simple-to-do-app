@@ -1,4 +1,11 @@
 pipeline {
+
+    environment {
+	registry = "pnguyen01/simple-to-do-nodejs-app"
+	registryCredential = "docker_cred"
+	dockerImage = ''
+    }
+
     agent {
         docker {
             image 'node:lts-buster-slim'            // Docker image for testing environment
@@ -11,17 +18,36 @@ pipeline {
     }
 
     stages {
+
         stage('Build Project') { 
             steps {
                 sh './jenkins/scripts/build.sh' 
             }
         }
 
-        stage('Test') {
+        stage('Basic Test') {
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
+
+	stage('Building Image') {
+		steps {
+			script {
+				dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
+			}
+		}
+	}
+
+	stage('Push Image to DockerHub') {
+		steps {
+			script {
+				docker.withRegistry('', registryCredential) {
+					dockerImage.push()
+				}
+			}
+		}
+	}
 
     }
 
