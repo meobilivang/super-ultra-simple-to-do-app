@@ -1,0 +1,13 @@
+version: '2'
+services:
+  to-do-app:
+    build: .
+    ports:
+      - "3400:3400"
+    environment:
+      NODE_ENVIROMMENT: development
+      PORT: 3400
+      DATABASE: mongodb+srv://mapdb:<db_password>@meobilivang.kqfr4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      DATABASE_PASSWORD: depzaithimoiconhiuduaiu1234
+      JWT_STRING: AhiHidongOk                 
+      JWT_EXPIRES_IN: 1d
