@@ -6,8 +6,8 @@ describe("Board CRUD", ()=> {
 
     let TOKEN = null;
     let testTask = {
-        "title": "Do laundry",
-        "description": "Dont use washing powder! Use Pods"
+        title: "Do laundry",
+        description: "Dont use washing powder! Use Pods"
     }
 
     describe("/api/auth/login - Log in User", () => {
@@ -39,7 +39,7 @@ describe("Board CRUD", ()=> {
                 .then((res) => {
                     
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("New Board has been created!");
+                    res.body.should.have.property("message").eql("New Task has been created!");
                     testTask.id = res.body.data.id;
                     
                     done();
@@ -50,19 +50,19 @@ describe("Board CRUD", ()=> {
             });
 	});
    
-    describe("/api/tasks/update/:id - Board", () => {
-		it("it should update 'title' & 'description' of board", (done) => {
+    describe("/api/tasks/update/:id - Update Task", () => {
+		it("it should update 'title' & 'description' of task", (done) => {
             chai.request(server)
-                .patch("/api/tasks/update/" + testBoard.id)
+                .patch("/api/tasks/update/" + testTask.id)
                 .set({ "Authorization": TOKEN })
                 .send({
-                    title: "Monday Morning Routine Work From Home Updated",
-                    description: "Updated what i do on monday morning while working from home"
+                    title: "Do laundry Updated",
+                    description: "Dont use washing powder! Use Pods (Updated)"
                 })
                 .then((res) => {
 
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("Existing Board has been updated!");
+                    res.body.should.have.property("message").eql("Existing Task has been updated!");
     
                     done();
                 })
@@ -72,15 +72,15 @@ describe("Board CRUD", ()=> {
             });
 	});
 
-    describe("/api/tasks/:id - Board", () => {
-		it("it should return the board with defined ID", (done) => {
+    describe("/api/tasks/:id - Get Task", () => {
+		it("it should return the Task with defined ID", (done) => {
             chai.request(server)
-                .get("/api/tasks/" + testBoard.id)
+                .get("/api/tasks/" + testTask.id)
                 .set({ "Authorization": TOKEN })
                 .then((res) => {
                     
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("Found your Board!");
+                    res.body.should.have.property("message").eql("Found your Task!");
     
                     done();
                 })
@@ -90,8 +90,8 @@ describe("Board CRUD", ()=> {
             });
 	});
 
-    describe("/api/tasks/list - Board", () => {
-		it("it should return board list of an User", (done) => {
+    describe("/api/tasks/list - Task List", () => {
+		it("it should return task list of an User", (done) => {
             chai.request(server)
                 .get(`/api/tasks/list`)
                 .set({ "Authorization": TOKEN })
@@ -99,7 +99,7 @@ describe("Board CRUD", ()=> {
     
                     res.should.have.status(200);
                     res.body.data.should.be.a('array');
-                    res.body.should.have.property("message").eql("Successfully found your Board list");
+                    res.body.should.have.property("message").eql("Successfully found your Task list");
     
                     done();
                 })
@@ -110,15 +110,15 @@ describe("Board CRUD", ()=> {
 	});
 
 
-    describe("/api/tasks/delete - Delete Board", () => {
-		it("it should delete an existing board", (done) => {
+    describe("/api/tasks/delete - Delete Task", () => {
+		it("it should delete an existing Task", (done) => {
             chai.request(server)
-                .delete("/api/tasks/delete/" + testBoard.id)
+                .delete("/api/tasks/delete/" + testTask.id)
                 .set({ "Authorization": TOKEN })
                 .then((res) => {
     
                     res.should.have.status(200);
-                    res.body.should.have.property("message").eql("Your Board has been deleted!");
+                    res.body.should.have.property("message").eql("Your Task has been deleted!");
     
                     done();
                 })

@@ -57,11 +57,11 @@ successMessage.boardUpdated = "Existing Board has been updated!";
 successMessage.boardDeleted = "Your Board has been deleted!";
 
 //Task constants
-successMessage.taskListFound = "Successfully found your Board list";
-successMessage.taskFound = "Found your Board!";
-successMessage.taskCreated = "New Board has been created!";
-successMessage.taskUpdated = "Existing Board has been updated!";
-successMessage.taskDeleted = "Your Board has been deleted!";
+successMessage.taskListFound = "Successfully found your Task list";
+successMessage.taskFound = "Found your Task!";
+successMessage.taskCreated = "New task has been created!";
+successMessage.taskUpdated = "Existing Task has been updated!";
+successMessage.taskDeleted = "Your Task has been deleted!";
 
 
 module.exports = {

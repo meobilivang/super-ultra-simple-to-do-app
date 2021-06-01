@@ -50,7 +50,7 @@ describe("Board CRUD", ()=> {
             });
 	});
    
-    describe("/api/boards/update/:id - Board", () => {
+    describe("/api/boards/update/:id - Update Board", () => {
 		it("it should update 'title' & 'description' of board", (done) => {
             chai.request(server)
                 .patch("/api/boards/update/" + testBoard.id)
