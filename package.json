@@ -4,8 +4,8 @@
   "description": "A super ultra basic to do app",
   "main": "app.js",
   "scripts": {
-    "start": "SET NODE_ENVIRONEMNT=dev && node server.js",
-    "test": "mocha --timeout 10000"
+    "start": "node server.js",
+    "test": "mocha --timeout 10000 --exit -R spec"
   },
   "author": "Phong D. (Julian) Nguyen",
   "license": "MIT",

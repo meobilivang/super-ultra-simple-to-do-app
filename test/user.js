@@ -1,62 +1,67 @@
-const { chai, app, should } = require('./testConfig');
+const { chai, server, should, testUser } = require('./testConfig');
+const UserModel = require('../models/userModel');
 
-const testUser = {
-    userName: "pnguyen5",
-    fullName: "Nguyen D. Phong",
-    email: "pnguyen5@conncoll.edu",
-    description: "Phong Nguyen the Tester", 
-    gender: "M",
-    password: "12345678",
-    passwordConfirm: "12345678",
-}
+// const testUser = {
+//     userName: "pnguyen5",
+//     fullName: "Nguyen D. Phong",
+//     email: "pnguyen5@conncoll.edu",
+//     description: "Phong Nguyen the Tester", 
+//     gender: "M",
+//     password: "12345678",
+//     passwordConfirm: "12345678",
+// }
 
 describe("User Authentication", () => {
-
-	describe("/api/auth/login - Failed Login", () => {
-		it("Log in shoud fail with unregistered user", (done) => {
-		chai.request(app)
-			.post("/api/auth/login")
-			.send({ "email": testUser.email, "password": testUser.password })
-			.end((err, res) => {
-
-				res.should.have.status(404);
-				res.body.should.have.property("error").eql("Missing credentials !");
-
-				done();
-			});
+	
+	before((done) => {
+		server.on("app-started", function(){
+			done();
 		});
 	});
 
+	describe("/api/auth/signup - Sign up User", () => {
 
-	describe("/api/auth/login - Sign up User", () => {
+		/**
+		 * Remove Test User if alreay exist in Db
+		 */
+		before((done) => {
+			UserModel.findOneAndDelete({ userName: {$eq: testUser.userName } }, (err, res) => {
+				done();
+			});
+		});
+
 		it("it shoud add a new user", (done) => {
-		chai.request(app)
-			.post("/api/auth/signup")
-			.send(testUSer)
-			.end((err, res) => {
-				
-				res.should.have.status(200);
-				res.body.should.have.property("message").eql("Successfully Signed Up!");
-				testUser.token = res.body.token;
+			chai.request(server)
+				.post("/api/auth/signup")
+				.send(testUser)
+				.then((res) => {
+		
+					res.should.have.status(200);
+					res.body.should.have.property("message").eql("Successfully Signed Up!");
+					testUser.token = res.body.token;
 
-				done();
-			});
+					done();
+                }).catch(err => {
+                    console.log(err);
+                });
 		});
 	});
 
-	describe("/api/auth/login - log in User", () => {
+	describe("/api/auth/login - Log in User", () => {ss
 		it("it shoud authenticate an exisiting user", (done) => {
-		chai.request(app)
-			.post("/api/auth/login")
-			.send({ "email": testUser.email, "password": testUser.password })
-			.end((err, res) => {
-				
-				res.should.have.status(200);
-				res.body.should.have.property("message").eql("Successfully Authenticated!");
-				testUser.token = res.body.token;
+			chai.request(server)
+				.post("/api/auth/login")
+				.send({ "userName": testUser.userName, "password": testUser.password })
+				.then((res) => {
 
-				done();
-			});
+					res.should.have.status(200);
+					res.body.should.have.property("message").eql("Successfully Authenticated!");
+					testUser.token = res.body.token;
+
+					done();
+                }).catch(err => {
+                    console.log(err);
+                });
 		});
 	});
 

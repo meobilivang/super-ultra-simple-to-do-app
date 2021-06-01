@@ -22,9 +22,15 @@ const database = process.env.DATABASE.replace('<db_password>', process.env.DATAB
 mongoose.connect(database, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
 }).then(connection => {
-    console.log('DB connection Successfully!');
+    app.emit("app-started");
+
+    if (process.env.NODE_ENVIROMMENT == "development") {
+        console.log('DB connection Successfully!');
+    }
+    
 });
 
 /** Start server */
@@ -40,3 +46,5 @@ process.on('unhandledRejection', err => {
     console.log(err.name, err.message);
     process.exit(1);
 });
+
+module.exports = app;

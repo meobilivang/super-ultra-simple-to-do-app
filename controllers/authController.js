@@ -99,7 +99,8 @@ exports.signup = async (req, res, next) => {
         password: password,
         passwordConfirm: passwordConfirm,
     });
-    
+
+  
     if (!user) {
       return next(new AppError(404, errorDescription.unableCreate, errorMessage.unableCreate), req, res, next);      
     }
