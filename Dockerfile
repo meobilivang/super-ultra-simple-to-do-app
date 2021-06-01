@@ -3,17 +3,17 @@ FROM node:lts
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# Copy project's metadata file
 COPY package*.json ./
 
+# Install Dependencies
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
 
+# Expose application port
 EXPOSE 3400
+
+# Start Express web server
 CMD [ "node", "server.js" ]
