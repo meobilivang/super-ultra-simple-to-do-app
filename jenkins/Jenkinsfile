@@ -47,6 +47,12 @@ pipeline {
 		}
 	}
 
+	stage('Remove built image from local machine') {
+		steps {
+			sh './jenkins/scripts/remove-img.sh'
+		}
+	}
+
     }
 
 }
