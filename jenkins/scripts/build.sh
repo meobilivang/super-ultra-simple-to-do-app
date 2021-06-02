@@ -10,4 +10,4 @@ echo '-----------------------------------------------'
 echo '						     '
 echo 'Installing Packages via `npm`...'
 set -x
-npm install
+npm install --unsafe-perm=true --allow-root
