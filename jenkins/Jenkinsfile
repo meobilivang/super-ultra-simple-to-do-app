@@ -4,7 +4,8 @@ pipeline {
 	registry = "pnguyen01/simple-to-do-nodejs-app"
 	registryCredential = "docker_cred"
 	dockerImage = ''
-        CI = 'true' 
+        CI = 'true'
+	HOME = '.'
     }
 
     agent {
