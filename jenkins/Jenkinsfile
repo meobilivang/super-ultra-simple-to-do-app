@@ -29,8 +29,8 @@ pipeline {
         }
 
 	stage('Building Image') {
+		agent { label 'master' }
 		steps {
-			agent { label 'master' }
 			script {
 				sh 'docker ps'
 				sh 'whoami'
