@@ -10,7 +10,7 @@ pipeline {
     agent {
         docker {
             image 'node:lts-buster-slim'            // Docker image for testing environment
-            args '-p 3400:3400' 
+            args '-p 3400:3400"' 
         }
     }
 
@@ -29,11 +29,11 @@ pipeline {
         }
 
 	stage('Building Image') {
-		agent { label 'master' }
 		steps {
 			script {
 				sh 'docker ps'
 				sh 'whoami'
+				sh 'apt-get update && apt-get install docker.io -y'
 				dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
 			}
 		}
