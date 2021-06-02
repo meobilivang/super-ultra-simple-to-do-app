@@ -36,15 +36,15 @@ pipeline {
 		}
 	}
 
-	//stage('Push Image to DockerHub') {
-		//steps {
-			//script {
-				//docker.withRegistry('', registryCredential) {
-				//	dockerImage.push()
-				//}
-			//}
-		//}
-	//}
+	stage('Push Image to DockerHub') {
+		steps {
+			script {
+				docker.withRegistry('', registryCredential) {
+					dockerImage.push()
+				}
+			}
+		}
+	}
 
     }
 
