@@ -10,7 +10,7 @@ pipeline {
     agent {
         docker {
             image 'node:lts-buster-slim'            // Docker image for testing environment
-            args '-p 3400:3400 -v /var/run/docker.sock:/var/run/docker.sock' 
+            args '-p 3400:3400' 
         }
     }
 
@@ -30,6 +30,7 @@ pipeline {
 
 	stage('Building Image') {
 		steps {
+			agent { label 'master' }
 			script {
 				sh 'docker ps'
 				sh 'whoami'
