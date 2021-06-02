@@ -2,7 +2,7 @@ pipeline {
 
     environment {
 	registry = "pnguyen01/simple-to-do-nodejs-app"
-	registryCredential = 'docker_cred'
+	registryCredential = 'docker_hub_cred'
 	dockerImage = ''
         CI = 'true'
 	HOME = '.'
