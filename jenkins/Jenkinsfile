@@ -12,83 +12,83 @@ pipeline {
 
     stages {
 
-     //    stage('Build Project') {
-	    // agent {
-					// docker {
-					// 	reuseNode true
-					// 	image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-					// 	args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-					// }
-	    // }
-     //        steps {
-     //            sh './jenkins/scripts/build.sh' 
-     //        }
-     //    }
+        stage('Build Project') {
+	    agent {
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+	    }
+            steps {
+                sh './jenkins/scripts/build.sh' 
+            }
+        }
 
-     //    stage('Basic Test') {
-	    // agent {
-					// docker {
-					// 		reuseNode true
-					// 		image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-					// 		args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-					// }
-     //        }
-     //        steps {
-     //            sh './jenkins/scripts/test.sh'
-     //        }
-     //    }
+        stage('Basic Test') {
+	    agent {
+					docker {
+							reuseNode true
+							image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+							args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+            }
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
+        }
 
-	// stage('Building Image') {
-	// 	agent {
- //                	docker {
- //                        	reuseNode true
- //                        	image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
- //                        	args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
- //                	}
- //           	}
-	// 	steps {
-	// 		script {
-	// 			dockerImage = docker.build registry + ":latest" 
-	// 		}
-	// 	}
-	// }
+	stage('Building Image') {
+		agent {
+                	docker {
+                        	reuseNode true
+                        	image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                        	args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                	}
+           	}
+		steps {
+			script {
+				dockerImage = docker.build registry + ":latest" 
+			}
+		}
+	}
 
-	// stage('Push Image to DockerHub') {
-	// 	agent {
-	// 				docker {
-	// 					reuseNode true
-	// 					image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-	// 					args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-	// 				}
-	// 	}
-	// 	steps {
-	// 		script {
-	// 			docker.withRegistry('', registryCredential) {
-	// 				dockerImage.push()
-	// 			}
-	// 		}
-	// 	}
-	// }
+	stage('Push Image to DockerHub') {
+		agent {
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+		}
+		steps {
+			script {
+				docker.withRegistry('', registryCredential) {
+					dockerImage.push()
+				}
+			}
+		}
+	}
 
-	// stage('Remove built image from local machine') {
-	// 	agent {
- //                        docker {
- //                                reuseNode true
- //                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
- //                                args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
- //                        }
- //                }
+	stage('Remove built image from local machine') {
+		agent {
+                        docker {
+                                reuseNode true
+                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                                args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                }
 
-	// 	steps {
-	// 		sh './jenkins/scripts/remove-img.sh'
-	// 	}
-	// }
+		steps {
+			sh './jenkins/scripts/remove-img.sh'
+		}
+	}
 
 	stage('Deploy') {
 			agent { node 'host-vm' }
 
 			steps {
-				sh 'ansible-playbook -i /home/pnguyen/workspace/to-do-app-nodejs/ansible/hosts /home/pnguyen/workspace/to-do-app-nodejs/ansible/site.yml'
+				sh './jenkins/scripts/deploy.sh'
 			}
 	}
 
