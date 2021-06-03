@@ -88,7 +88,8 @@ pipeline {
 		agent { node 'host-vm' }
 
 		steps {
-			sh 'ansible-playbook -i ansible/hosts ansible/site.yml'
+			checkout scm  //Pull code
+			sh 'ansible-playbook -i super-ultra-simple-to-do-app/ansible/hosts super-ultra-simple-to-do-app/ansible/site.yml'
 		}
 	}
 
