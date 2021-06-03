@@ -1,44 +1,90 @@
-node('master') {
-    
-    /* Pulling Code */
-    checkout scm
+pipeline {
 
-    docker.image('pnguyen01/node-docker:1.1').withRun('-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock') { c ->
-        
-        stage('Build') {
-             sh './jenkins/scripts/build.sh'
-        }
+    agent none 
 
-        stage('Unit Test') {
-             sh './jenkins/scripts/test.sh'
-        }
+    environment {
+		registry = "pnguyen01/simple-to-do-nodejs-app"
+		registryCredential = 'docker_hub_cred'
+		dockerImage = ''
+		CI = 'true'
+		HOME = '.'
+    }
 
-        stage('Build Image') {
-            dockerImage = docker.build registry + ":1.$BUILD_NUMBER"
-        }
+    stages {
 
-        stage('Publish to DockerHub') {
-            docker.withRegistry('', registryCredential) {
-                dockerImage.push()
+        stage('Build Project') {
+	    agent {
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+	    }
+            steps {
+                sh './jenkins/scripts/build.sh' 
             }
         }
 
-        stage('Remove Docker Image') {
-            sh './jenkins/scripts/remove-img.sh'
+        stage('Basic Test') {
+	    agent {
+					docker {
+							reuseNode true
+							image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+							args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+            }
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
         }
+
+	stage('Building Image') {
+		agent {
+                	docker {
+                        	reuseNode true
+                        	image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                        	args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                	}
+           	}
+		steps {
+			script {
+				dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
+			}
+		}
+	}
+
+	stage('Push Image to DockerHub') {
+		agent {
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
+		}
+		steps {
+			script {
+				docker.withRegistry('', registryCredential) {
+					dockerImage.push()
+				}
+			}
+		}
+	}
+
+	stage('Remove built image from local machine') {
+		agent {
+                        docker {
+                                reuseNode true
+                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                                args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                }
+
+		steps {
+			sh './jenkins/scripts/remove-img.sh'
+		}
+	}
+
     }
 
 }
 
-//node('host-vm') {
-    
-    /*
-    * Deploy w/ Ansible
-    */
- //   checkout scm
-
- //   step('Deploy') {
- //       sh ('')
- //       sh ('')
- //   }
-//}
