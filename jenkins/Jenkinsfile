@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { node { label 'docker' } }
+    agent { none }
 
     environment {
 		registry = "pnguyen01/simple-to-do-nodejs-app"
