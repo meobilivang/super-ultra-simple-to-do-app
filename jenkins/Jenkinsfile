@@ -84,6 +84,14 @@ pipeline {
 		}
 	}
 
+	stage('Deploy') {
+		agent { node 'host-vm' }
+
+		steps {
+			sh 'ansible-playbook -i ansible/hosts ansible/site.yml'
+		}
+	}
+
     }
 
 }
