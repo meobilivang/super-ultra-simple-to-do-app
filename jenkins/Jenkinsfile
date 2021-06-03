@@ -9,27 +9,51 @@ pipeline {
     }
 
     agent {
-        docker {
-            image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-            args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock' 
-        }
+    	node {
+		label: 'docker'
+	}
+        //docker {
+            //image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+            //args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock' 
+        //}
     }
 
     stages {
 
-        stage('Build Project') { 
+        stage('Build Project') {
+	    agent {
+		docker {
+			reuseNode true
+            		image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+            		args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+        	}
+	    }
             steps {
                 sh './jenkins/scripts/build.sh' 
             }
         }
 
         stage('Basic Test') {
+	    agent {
+                docker {
+                        reuseNode true
+                        image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                        args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
 
 	stage('Building Image') {
+		agent {
+                	docker {
+                        	reuseNode true
+                        	image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                        	args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                	}
+           	}
 		steps {
 			script {
 				dockerImage = docker.build registry + ":1.$BUILD_NUMBER" 
@@ -38,6 +62,13 @@ pipeline {
 	}
 
 	stage('Push Image to DockerHub') {
+		agent {
+			docker {
+                                reuseNode true
+                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+				args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+			}
+		}
 		steps {
 			script {
 				docker.withRegistry('', registryCredential) {
@@ -48,6 +79,14 @@ pipeline {
 	}
 
 	stage('Remove built image from local machine') {
+		agent {
+                        docker {
+                                reuseNode true
+                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+                                args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                }
+
 		steps {
 			sh './jenkins/scripts/remove-img.sh'
 		}
