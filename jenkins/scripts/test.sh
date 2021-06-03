@@ -1,9 +1,8 @@
 echo '-----------------------------------------------'
 echo '						     '
-echo '						     '
 echo 'II. Phase Two'
 echo '						     '
-echo '=============Running Test cases================'
+echo '=============RUNNING UNIT TESTS================'
 echo '-----------------------------------------------'
 set -x
 npm test

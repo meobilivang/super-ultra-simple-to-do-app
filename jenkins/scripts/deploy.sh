@@ -1,7 +1,13 @@
-echo 'DEPLOYING TO-DO APPLICATION TO REMOTE HOST'
-
+echo '--------------------------------------------------------------------'
+echo '						     			  '
+echo 'VI. Phase Six'
+echo '						     			  '
+echo '=============DEPLOYING TO-DO APPLICATION TO REMOTE HOST============='
+echo '						     			  '
+echo '						     			  '
+echo '--------------------------------------------------------------------'
 #Run Ansible Playbooks
-ansible-playbook -i $(WORKSPACE)/ansible/hosts $(WORKSPACE)/ansible/site.yml
+ansible-playbook -i $(pwd)/ansible/hosts $(pwd)/ansible/site.yml
 
 #Remove files
-#rm -f  $(WORKSPACE)/* 
+#rm -f  $(pwd)/* 
