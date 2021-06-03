@@ -7,7 +7,7 @@
   register: run_to_do_app
   docker_container:
     name: to-do-app
-    image: "{{ to_do_nodejs_app_img }}"
+    image: "{{ to_do_nodejs_app_img }}:latest"
     state: started
     pull: yes
     networks:
