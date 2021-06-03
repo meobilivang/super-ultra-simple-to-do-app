@@ -1,32 +1,28 @@
 pipeline {
 
-    environment {
-	registry = "pnguyen01/simple-to-do-nodejs-app"
-	registryCredential = 'docker_hub_cred'
-	dockerImage = ''
-        CI = 'true'
-	HOME = '.'
-    }
-
     agent {
     	node {
 		label: 'docker'
 	}
-        //docker {
-            //image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-            //args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock' 
-        //}
+    }
+
+    environment {
+		registry = "pnguyen01/simple-to-do-nodejs-app"
+		registryCredential = 'docker_hub_cred'
+		dockerImage = ''
+		CI = 'true'
+		HOME = '.'
     }
 
     stages {
 
         stage('Build Project') {
 	    agent {
-		docker {
-			reuseNode true
-            		image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-            		args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-        	}
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
 	    }
             steps {
                 sh './jenkins/scripts/build.sh' 
@@ -35,11 +31,11 @@ pipeline {
 
         stage('Basic Test') {
 	    agent {
-                docker {
-                        reuseNode true
-                        image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-                        args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-                }
+					docker {
+							reuseNode true
+							image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+							args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
             }
             steps {
                 sh './jenkins/scripts/test.sh'
@@ -63,11 +59,11 @@ pipeline {
 
 	stage('Push Image to DockerHub') {
 		agent {
-			docker {
-                                reuseNode true
-                                image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
-				args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-			}
+					docker {
+						reuseNode true
+						image 'pnguyen01/node-docker:1.1'            // Docker image for testing environment
+						args '-p 3400:3400 --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+					}
 		}
 		steps {
 			script {
