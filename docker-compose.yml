@@ -8,7 +8,7 @@ services:
     environment:
       NODE_ENVIROMMENT: development
       PORT: 3400
-      DATABASE: mongodb+srv://mapdb:depzaithimoiconhiuduaiu1234@meobilivang.kqfr4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      DATABASE: <omitted>
       DATABASE_PASSWORD: depzaithimoiconhiuduaiu1234
       JWT_STRING: AhiHidongOk                 
       JWT_EXPIRES_IN: 1d

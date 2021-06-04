@@ -10,6 +10,6 @@ network_app=to-do-app-net
 to_do_nodejs_app_img=pnguyen01/simple-to-do-nodejs-app
 node_env=development 
 app_port=3400
-database=mongodb+srv://mapdb:depzaithimoiconhiuduaiu1234@meobilivang.kqfr4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+database=<omitted>
 jwt_string=AhiHidongOk                 
 jwt_expiration=1d

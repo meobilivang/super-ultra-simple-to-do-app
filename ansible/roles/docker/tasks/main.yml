@@ -16,6 +16,6 @@
       - "3400:3400"
     env:
         PORT: "{{ app_port | quote }}"
-        DATABASE: "{{ database | quote }}"
+        DATABASE: "{{ database }}"
         JWT_STRING: "{{ jwt_string | quote }}"                 
         JWT_EXPIRES_IN: "{{ jwt_expiration | quote }}"

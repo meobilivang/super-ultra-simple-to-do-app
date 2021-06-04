@@ -17,6 +17,7 @@ const app = require('./app');
 
 //Retrieving database Connection URL from .env
 //const database = process.env.DATABASE.replace('<db_password>', process.env.DATABASE_PASSWORD);
+console.log(process.env);
 
 const database = process.env.DATABASE;
 
